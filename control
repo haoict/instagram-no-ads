@@ -1,0 +1,9 @@
+Package: com.haoict.instanoads
+Name: Instagram No Ads
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Hide Ads on Instagram app (News Feed and Story)
+Maintainer: Hao Nguyen
+Author: Hao Nguyen
+Section: Tweaks

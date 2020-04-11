@@ -1,38 +1,32 @@
-#import <dlfcn.h>
+#import <Foundation/Foundation.h>
 
 @interface IGFeedItem : NSObject
 - (BOOL)isSponsored;
 - (BOOL)isSponsoredApp;
 @end
 
-%group IGHooks
-
+%group Feed
 %hook IGMainFeedListAdapterDataSource
 - (NSArray *)objectsForListAdapter:(id)arg1 {
-  NSArray *orig = %orig;
-  NSMutableArray *objectsNoAds = [@[] mutableCopy];
-  for (id object in orig) {
-    if ([object isKindOfClass:(NSClassFromString(@"IGFeedItem"))]) {
-      if ([object isSponsored] || [object isSponsoredApp]) {
-        continue;
-      }
-    }
-    [objectsNoAds addObject:object];
-  }
-  return objectsNoAds;
+    NSMutableArray *orig = [%orig mutableCopy];
+    [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) [orig removeObjectAtIndex:idx];
+    }];
+    return [orig copy];
 }
 %end
+%end
 
+%group Stories
 %hook IGStoryAdPool
 - (id)initWithUserSession:(id)arg1 {
-  %orig(nil);
-  return nil;
+    return nil;
 }
 %end
-
 %end
 
-%ctor{
-  dlopen([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Frameworks/InstagramAppCoreFramework.framework/InstagramAppCoreFramework"] UTF8String], RTLD_NOW);
-  %init(IGHooks);
+%ctor {
+    %init(Feed);
+    dlopen([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Frameworks/InstagramAppCoreFramework.framework/InstagramAppCoreFramework"] UTF8String], RTLD_NOW);
+    %init(Stories);
 }

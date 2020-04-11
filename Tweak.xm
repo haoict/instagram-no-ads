@@ -8,11 +8,11 @@
 %group Feed
 %hook IGMainFeedListAdapterDataSource
 - (NSArray *)objectsForListAdapter:(id)arg1 {
-    NSMutableArray *orig = [%orig mutableCopy];
-    [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) [orig removeObjectAtIndex:idx];
-    }];
-    return [orig copy];
+  NSMutableArray *orig = [%orig mutableCopy];
+  [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    if ([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) [orig removeObjectAtIndex:idx];
+  }];
+  return [orig copy];
 }
 %end
 %end
@@ -20,13 +20,13 @@
 %group Stories
 %hook IGStoryAdPool
 - (id)initWithUserSession:(id)arg1 {
-    return nil;
+  return nil;
 }
 %end
 %end
 
 %ctor {
-    %init(Feed);
-    dlopen([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Frameworks/InstagramAppCoreFramework.framework/InstagramAppCoreFramework"] UTF8String], RTLD_NOW);
-    %init(Stories);
+  dlopen([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Frameworks/InstagramAppCoreFramework.framework/InstagramAppCoreFramework"] UTF8String], RTLD_NOW);
+  %init(Feed);
+  %init(Stories);
 }

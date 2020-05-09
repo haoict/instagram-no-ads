@@ -1,9 +1,20 @@
 Package: com.haoict.instanoads
 Name: Instagram No Ads
-Depends: mobilesubstrate
-Version: 0.0.2
+Depends: mobilesubstrate, preferenceloader, firmware (>= 10)
+Version: 1.0.1
 Architecture: iphoneos-arm
-Description: Hide Ads on Instagram app (News Feed and Story)
+Description: Free & Open Source Tweak for Instagram
+ Free & Open Source Tweak for Instagram
+ Features:
+ - Remove Ads (New Feeds and Stories)
+ - Lightweight
+ - Support iOS 10 (not tested) - 11 (tested) - 12 (tested) - 13 (tested)
+ - Support latest Instagram version (If it doesn't work, you should update the app to latest version >= 140.0)
+ . 
+ I work very hard to make good, free and open source tweaks for everyone
+ If you want to support, you can buy me a coffee at https://www.paypal.me/haoict
+ . 
+ Thanks a ton
 Maintainer: Hao Nguyen
 Author: Hao Nguyen
 Section: Tweaks

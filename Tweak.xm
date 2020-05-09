@@ -1,9 +1,15 @@
-#import <Foundation/Foundation.h>
+#import "Tweak.h"
 
-@interface IGFeedItem : NSObject
-- (BOOL)isSponsored;
-- (BOOL)isSponsoredApp;
-@end
+/**
+ * Load Preferences
+ */
+BOOL noads;
+
+static void reloadPrefs() {
+  NSDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@PLIST_PATH] ?: [@{} mutableCopy];
+
+  noads = [[settings objectForKey:@"noads"] ?: @(YES) boolValue];
+}
 
 %group IGHooks
   %hook IGMainFeedListAdapterDataSource
@@ -36,6 +42,13 @@
 %end
 
 %ctor {
+  CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) reloadPrefs, CFSTR(PREF_CHANGED_NOTIF), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+  reloadPrefs();
+
+  if (!noads) {
+    return;
+  }
+
   dlopen([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Frameworks/InstagramAppCoreFramework.framework/InstagramAppCoreFramework"] UTF8String], RTLD_NOW);
   %init(IGHooks);
 }

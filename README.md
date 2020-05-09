@@ -5,6 +5,8 @@
 
 Free & Open Source Tweak for Instagram app on iOS!
 
+<img src="https://haoict.github.io/cydia/images/instanoads.jpg" alt="Instagram No Ads" width="414"/>
+
 ## Features
 - Remove Ads (New Feeds and Stories)
 - Lightweight
@@ -17,7 +19,7 @@ Free & Open Source Tweak for Instagram app on iOS!
 
 ## Screenshot
 
-N/A
+<img src="https://haoict.github.io/cydia/images/instanoadspref.png" alt="Instagram No Ads Preferences" width="280"/>
 
 ## Building
 

@@ -1,5 +1,5 @@
 ARCHS = arm64 arm64e
-TARGET = iphone::12.0:latest
+TARGET = iphone:clang:12.2:10.0
 INSTALL_TARGET_PROCESSES = Instagram
 
 include $(THEOS)/makefiles/common.mk

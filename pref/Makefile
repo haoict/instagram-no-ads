@@ -6,6 +6,7 @@ BUNDLE_NAME = INAPref
 INAPref_FILES = $(wildcard *.m)
 INAPref_INSTALL_PATH = /Library/PreferenceBundles
 INAPref_PRIVATE_FRAMEWORKS = Preferences
+INAPref_EXTRA_FRAMEWORKS = libhdev
 INAPref_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/bundle.mk

@@ -6,6 +6,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = instanoads
 instanoads_FILES = $(wildcard *.xm *.m)
+instanoads_EXTRA_FRAMEWORKS = libhdev
 instanoads_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk

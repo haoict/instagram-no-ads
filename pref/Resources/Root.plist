@@ -54,6 +54,25 @@
         <string>com.haoict.instanoadspref/PrefChanged</string>
       </dict>
 
+      <dict>
+        <key>cell</key>
+        <string>PSSwitchCell</string>
+        <key>cellClass</key>
+        <string>HPSSwitchCell</string>
+        <key>default</key>
+        <true/>
+        <key>defaults</key>
+        <string>com.haoict.instanoadspref</string>
+        <key>key</key>
+        <string>canSaveMedia</string>
+        <key>label</key>
+        <string>CAN_SAVE_MEDIA</string>
+        <key>subtitle</key>
+        <string>PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION</string>
+        <key>PostNotification</key>
+        <string>com.haoict.instanoadspref/PrefChanged</string>
+      </dict>
+
       <!-- Support Me -->
       <dict>
         <key>cell</key>

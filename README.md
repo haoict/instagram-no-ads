@@ -9,7 +9,7 @@ Free & Open Source Tweak for Instagram app on iOS!
 
 ## Features
 - Remove Ads (New Feeds and Stories)
-- Lightweight
+- Can save media (Photos, Videos, IGTV, Stories, press and hold to show download option)
 - Support iOS 10 (not tested) - 11 (tested) - 12 (tested) - 13 (tested)
 - Support latest Instagram version (If it doesn't work, you should update the app to latest version >= 140.0)
 

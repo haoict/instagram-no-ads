@@ -7,6 +7,8 @@
   "MAIN_PREFERENCES" = "Main Preferences";
   "NO_ADS" = "No Ads";
   "REMOVE_ADS_IN_NEWS_FEED_AND_STORIES" = "Remove Ads in News Feed and Stories";
+  "CAN_SAVE_MEDIA" = "Can Save Media";
+  "PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION" = "Press and hold media to show download option";
   "OTHER_PREFERENCES" = "Other Preferences";
   "RESET_SETTINGS" = "Reset Settings";
   "SUPPORT_ME" = "Support Me";

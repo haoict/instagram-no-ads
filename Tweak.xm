@@ -11,14 +11,32 @@ static void reloadPrefs() {
   noads = [[settings objectForKey:@"noads"] ?: @(YES) boolValue];
 }
 
+static NSArray* removeAdsItemsInList(NSArray *list) {
+  NSMutableArray *orig = [list mutableCopy];
+  [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    if (([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) || [obj isKindOfClass:%c(IGAdItem)]) {
+      [orig removeObjectAtIndex:idx];
+    }
+  }];
+  return [orig copy];
+}
+
 %group IGHooks
   %hook IGMainFeedListAdapterDataSource
     - (NSArray *)objectsForListAdapter:(id)arg1 {
-      NSMutableArray *orig = [%orig mutableCopy];
-      [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) [orig removeObjectAtIndex:idx];
-      }];
-      return [orig copy];
+      return removeAdsItemsInList(%orig);
+    }
+  %end
+
+  %hook IGVideoFeedViewController
+    - (NSArray *)objectsForListAdapter:(id)arg1 {
+      return removeAdsItemsInList(%orig);
+    }
+  %end
+
+  %hook IGChainingFeedViewController
+    - (NSArray *)objectsForListAdapter:(id)arg1 {
+      return removeAdsItemsInList(%orig);
     }
   %end
 

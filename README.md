@@ -34,6 +34,8 @@ make do
 
 [jacobcxdev](https://github.com/jacobcxdev)
 
+[jaideejung007](https://github.com/jaideejung007) (Thai Translator)
+
 Contributions of any kind welcome!
 
 ## License

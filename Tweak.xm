@@ -1,8 +1,9 @@
+/**
+ * @author Hao Nguyen
+ */
+
 #import "Tweak.h"
 
-/**
- * Load Preferences
- */
 BOOL noads;
 BOOL canSaveMedia;
 
@@ -11,6 +12,17 @@ static void reloadPrefs() {
 
   noads = [[settings objectForKey:@"noads"] ?: @(YES) boolValue];
   canSaveMedia = [[settings objectForKey:@"canSaveMedia"] ?: @(YES) boolValue];
+}
+
+static void checkAppVersion() {
+  NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+  if ([version compare:@"145.0" options:NSNumericSearch] == NSOrderedAscending) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [HCommon showAlertMessage:@"Your current version of Instagram is not supported, please go to App Store and update it (>=145.0)" withTitle:@"Please update Instagram" viewController:nil];
+      });
+    });
+  }
 }
 
 static NSArray* removeAdsItemsInList(NSArray *list) {
@@ -64,9 +76,9 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
 %group CanSaveMedia
   %hook IGImageView
     - (id)initWithFrame:(CGRect)arg1 shouldBackgroundDecode:(BOOL)arg2 shouldUseProgressiveJPEG:(BOOL)arg3 placeholderProvider:(id)arg4 {
-      id orig = %orig;
-      [orig addHandleLongPress];
-      return orig;
+      self = %orig;
+      [self addHandleLongPress];
+      return self;
     }
 
     %new
@@ -79,6 +91,10 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
       if (sender.state == UIGestureRecognizerStateBegan) {
+        if ([self.viewController isKindOfClass:%c(IGStoryViewerViewController)]) { // don't show download alert if this photo is story, use download button instead
+          return;
+        }
+
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         [alert addAction:[UIAlertAction actionWithTitle:@"Download photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
           [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:self.imageSpecifier.url appendExtension:nil mediaType:Image toAlbum:@"Instagram" view:self];
@@ -151,25 +167,36 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     }
   %end
 
-  %hook IGStoryVideoView
-    - (id)initWithFrame:(CGRect)arg1 userSession:(id)arg2 playerPreloadPool:(id)arg3 subtitleOffset:(double)arg4 {
-      id orig = %orig;
-      [orig addHandleLongPress];
-      return orig;
+  %hook IGStoryViewerContainerView
+    %property (nonatomic, retain) UIButton *hDownloadButton;
+    - (id)initWithFrame:(CGRect)arg1 shouldCreateComposerBackgroundView:(BOOL)arg2 userSession:(id)arg3 bloksContext:(id)arg4 {
+      self = %orig;
+
+      // detect iphone with notch
+      double yPadding = 90;
+      if (@available( iOS 11.0, * )) {
+        if ([[[UIApplication sharedApplication] keyWindow] safeAreaInsets].bottom > 0) {
+          yPadding = 120.0;
+        }
+      }
+      self.hDownloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
+      [self.hDownloadButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
+      [self.hDownloadButton addTarget:self action:@selector(hDownloadButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+      // [self.hDownloadButton setTitle:@"Download" forState:UIControlStateNormal];
+      [self.hDownloadButton setBackgroundImage:[UIImage imageWithContentsOfFile:@"/Library/Application Support/instanoads/download.png"] forState:UIControlStateNormal];
+      self.hDownloadButton.frame = CGRectMake(self.frame.size.width - 40, self.frame.size.height - yPadding, 24.0, 24.0);
+      [self addSubview:self.hDownloadButton];
+      return self;
     }
 
     %new
-    - (void)addHandleLongPress {
-      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-      longPress.minimumPressDuration = 0.5;
-      [self addGestureRecognizer:longPress];
-    }
-
-    %new
-    - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
-      if (sender.state == UIGestureRecognizerStateBegan) {
+    - (void)hDownloadButtonPressed:(UIButton *)sender {
+      if ([self.mediaView isKindOfClass:%c(IGStoryPhotoView)]) {
+        NSURL *url = ((IGStoryPhotoView *)self.mediaView).mediaViewLastLoadedImageSpecifier.url;
+        [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:url appendExtension:nil mediaType:Image toAlbum:@"Instagram" view:self];
+      } else if ([self.mediaView isKindOfClass:%c(IGStoryVideoView)]) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
-        IGVideo *_video = MSHookIvar<IGVideo *>(self.videoPlayer, "_video");
+        IGVideo *_video = MSHookIvar<IGVideo *>(((IGStoryVideoView *)self.mediaView).videoPlayer, "_video");
         NSArray *videoURLArray = [_video.allVideoURLs allObjects];
         for (int i = 0; i < [videoURLArray count]; i++) {
           [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d", i + 1] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -178,6 +205,8 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
         }
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
         [self.viewController presentViewController:alert animated:YES completion:nil];
+      } else {
+        [HCommon showAlertMessage:@"This story has no media to download. Seems like it's a bug. Please report to the developer" withTitle:@"Error" viewController:nil];
       }
     }
   %end
@@ -187,15 +216,7 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) reloadPrefs, CFSTR(PREF_CHANGED_NOTIF), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
   reloadPrefs();
   dlopen([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Frameworks/InstagramAppCoreFramework.framework/InstagramAppCoreFramework"] UTF8String], RTLD_NOW);
-
-  NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-  if ([version compare:@"145.0" options:NSNumericSearch] == NSOrderedAscending) {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [HCommon showAlertMessage:@"Your current version of Instagram is not supported, please go to App Store and update it (>=145.0)" withTitle:@"Please update Instagram" viewController:nil];
-      });
-    });
-  }
+  checkAppVersion();
 
   if (noads) {
     %init(NoAds);

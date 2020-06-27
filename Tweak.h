@@ -4,6 +4,10 @@
 #define PLIST_PATH "/var/mobile/Library/Preferences/com.haoict.instanoadspref.plist"
 #define PREF_CHANGED_NOTIF "com.haoict.instanoadspref/PrefChanged"
 
+@interface UIView (RCTViewUnmounting)
+@property(retain, nonatomic) UIViewController *viewController;
+@end
+
 @interface IGFeedItem : NSObject
 - (BOOL)isSponsored;
 - (BOOL)isSponsoredApp;
@@ -19,14 +23,12 @@
 
 @interface IGImageView : UIImageView
 @property(retain, nonatomic) IGImageSpecifier *imageSpecifier;
-@property(retain, nonatomic) UIViewController *viewController;
 - (void)addHandleLongPress; // new
 - (void)handleLongPress:(UILongPressGestureRecognizer *)sender; // new
 @end
 
 @interface IGFeedItemVideoView : UIView
 @property(readonly, nonatomic) IGVideo *video;
-@property(retain, nonatomic) UIViewController *viewController;
 - (void)addHandleLongPress; // new
 - (void)handleLongPress:(UILongPressGestureRecognizer *)sender; // new
 @end
@@ -43,14 +45,26 @@
 
 @interface IGTVFullscreenVideoCell : UICollectionViewCell
 @property(nonatomic) IGTVVideoSectionController *delegate;
-@property(retain, nonatomic) UIViewController *viewController;
 - (void)addHandleLongPress; // new
 - (void)handleLongPress:(UILongPressGestureRecognizer *)sender; // new
 @end
 
-@interface IGStoryVideoView : UIView
+
+/**
+ * For download story photo/video
+ */
+@protocol IGStoryPlayerMediaViewType
+@end
+
+@interface IGStoryPhotoView : UIView<IGStoryPlayerMediaViewType>
+@property(retain, nonatomic) IGImageSpecifier *mediaViewLastLoadedImageSpecifier; 
+@end
+
+@interface IGStoryVideoView : UIView<IGStoryPlayerMediaViewType>
 @property(retain, nonatomic) IGVideoPlayer *videoPlayer;
-@property(retain, nonatomic) UIViewController *viewController;
-- (void)addHandleLongPress; // new
-- (void)handleLongPress:(UILongPressGestureRecognizer *)sender; // new
+@end
+
+@interface IGStoryViewerContainerView : UIView
+@property(retain, nonatomic) UIView<IGStoryPlayerMediaViewType> *mediaView;
+@property(nonatomic, retain) UIButton *hDownloadButton; // new property
 @end

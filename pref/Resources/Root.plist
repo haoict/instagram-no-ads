@@ -134,7 +134,7 @@
         <key>action</key>
         <string>openURL:</string>
         <key>url</key>
-        <string>https://github.com/haoict/instanoads</string>
+        <string>https://github.com/haoict/instagram-no-ads</string>
       </dict>
       <dict>
         <key>cell</key>
@@ -148,7 +148,7 @@
         <key>action</key>
         <string>openURL:</string>
         <key>url</key>
-        <string>https://github.com/haoict/instanoads/issues/new</string>
+        <string>https://github.com/haoict/instagram-no-ads/issues/new</string>
       </dict>
 
       <dict>

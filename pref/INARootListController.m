@@ -1,7 +1,7 @@
 #include "INARootListController.h"
 
 #define TWEAK_TITLE "Instagram No Ads"
-#define TINT_COLOR "#bd298c"
+#define TINT_COLOR "#7f009c"
 #define BUNDLE_NAME "INAPref"
 
 @implementation INARootListController

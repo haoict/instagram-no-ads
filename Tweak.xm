@@ -71,6 +71,23 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
       return nil;
     }
   %end
+
+  // IG 148.0
+  %hook IGStoryAdsResponseParser
+    - (id)parsedObjectFromResponse:(id)arg1 {
+      return nil;
+    }
+
+    - (id)initWithReelStore:(id)arg1 {
+      return nil;
+    }
+  %end
+
+  %hook IGStoryAdsOptInTextView
+    - (id)initWithBrandedContentStyledString:(id)arg1 sponsoredPostLabel:(id)arg2 {
+      return nil;
+    }
+  %end
 %end
 
 %group CanSaveMedia

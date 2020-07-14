@@ -20,7 +20,7 @@
         <string>HPSHeaderCell</string>
         <key>label</key>
         <string>Instagram No Ads</string>
-        <key>subtitle</key>
+        <key>subtitles</key>
         <array>
           <string>By @haoict</string>
           <string>Free and Open Source!</string>

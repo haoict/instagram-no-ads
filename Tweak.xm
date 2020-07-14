@@ -14,17 +14,6 @@ static void reloadPrefs() {
   canSaveMedia = [[settings objectForKey:@"canSaveMedia"] ?: @(YES) boolValue];
 }
 
-static void checkAppVersion() {
-  NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-  if ([version compare:@"145.0" options:NSNumericSearch] == NSOrderedAscending) {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [HCommon showAlertMessage:@"Your current version of Instagram is not supported, please go to App Store and update it (>=145.0)" withTitle:@"Please update Instagram" viewController:nil];
-      });
-    });
-  }
-}
-
 static NSArray* removeAdsItemsInList(NSArray *list) {
   NSMutableArray *orig = [list mutableCopy];
   [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -101,7 +90,7 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)addHandleLongPress {
       UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-      longPress.minimumPressDuration = 0.5;
+      longPress.minimumPressDuration = 0.3;
       [self addGestureRecognizer:longPress];
     }
 
@@ -132,7 +121,7 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)addHandleLongPress {
       UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-      longPress.minimumPressDuration = 0.5;
+      longPress.minimumPressDuration = 0.3;
       [self addGestureRecognizer:longPress];
     }
 
@@ -162,7 +151,7 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)addHandleLongPress {
       UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-      longPress.minimumPressDuration = 0.5;
+      longPress.minimumPressDuration = 0.3;
       [self addGestureRecognizer:longPress];
     }
 
@@ -229,17 +218,26 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
   %end
 %end
 
+static id observer;
 %ctor {
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) reloadPrefs, CFSTR(PREF_CHANGED_NOTIF), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
   reloadPrefs();
-  dlopen([[[NSBundle mainBundle].bundlePath stringByAppendingPathComponent:@"Frameworks/InstagramAppCoreFramework.framework/InstagramAppCoreFramework"] UTF8String], RTLD_NOW);
-  checkAppVersion();
 
-  if (noads) {
-    %init(NoAds);
-  }
+  // http://iphonedevwiki.net/index.php/User:Uroboro#Using_blocks
+  observer = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
+    object:nil queue:[NSOperationQueue mainQueue]
+    usingBlock:^(NSNotification *notification) {
+      if (noads) {
+        %init(NoAds);
+      }
 
-  if (canSaveMedia) {
-    %init(CanSaveMedia);
-  }
+      if (canSaveMedia) {
+        %init(CanSaveMedia);
+      }
+    }
+  ];
+}
+
+%dtor {
+  [[NSNotificationCenter defaultCenter] removeObserver:observer];
 }

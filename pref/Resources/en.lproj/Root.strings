@@ -9,6 +9,8 @@
   "REMOVE_ADS_IN_NEWS_FEED_AND_STORIES" = "Remove Ads in News Feed and Stories";
   "CAN_SAVE_MEDIA" = "Can Save Media";
   "PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION" = "Press and hold media to show download option";
+  "CAN_SAVE_HD_PROFILE_PICTURE" = "Can Save HD Profile Picture";
+  "PRESS_AND_HOLD_PROFILE_PICTURE_TO_DOWNLOAD" = "Press and hold Profile Picture to download";
   "OTHER_PREFERENCES" = "Other Preferences";
   "RESET_SETTINGS" = "Reset Settings";
   "SUPPORT_ME" = "Support Me";

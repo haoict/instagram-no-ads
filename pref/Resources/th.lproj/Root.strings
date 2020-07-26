@@ -9,6 +9,8 @@
   "REMOVE_ADS_IN_NEWS_FEED_AND_STORIES" = "ลบโฆษณาในหน้าฟีดข่าวและสตอรี่";
   "CAN_SAVE_MEDIA" = "บันทึกมีเดียได้";
   "PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION" = "แตะค้างไว้ที่มีเดีย (รูปภาพ/วิดีโอ) เพื่อแสดงตัวเลือกดาวน์โหลด";
+  "CAN_SAVE_HD_PROFILE_PICTURE" = "สามารถบันทึกรูปภาพโปรไฟล์ HD";
+  "PRESS_AND_HOLD_PROFILE_PICTURE_TO_DOWNLOAD" = "กดรูปภาพโปรไฟล์ค้างไว้เพื่อดาวน์โหลด";
   "OTHER_PREFERENCES" = "ตั้งค่าอื่น ๆ";
   "RESET_SETTINGS" = "รีเซ็ตการตั้งค่า";
   "SUPPORT_ME" = "สนับสนุนพวกเรา";

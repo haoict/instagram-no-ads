@@ -9,6 +9,8 @@
   "REMOVE_ADS_IN_NEWS_FEED_AND_STORIES" = "Gỡ quảng cáo ở News Feed và Story";
   "CAN_SAVE_MEDIA" = "Có thể tải ảnh và video";
   "PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION" = "Ấn và giữ vào ảnh, video để tải";
+  "CAN_SAVE_HD_PROFILE_PICTURE" = "Có thể tải ảnh đại diện HD";
+  "PRESS_AND_HOLD_PROFILE_PICTURE_TO_DOWNLOAD" = "Ấn và giữ vào ảnh đại diện để tải";
   "OTHER_PREFERENCES" = "Tùy chỉnh phụ";
   "RESET_SETTINGS" = "Đặt lại tùy chỉnh";
   "SUPPORT_ME" = "Hỗ trợ tôi";

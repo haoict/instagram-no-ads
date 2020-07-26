@@ -68,3 +68,16 @@
 @property(retain, nonatomic) UIView<IGStoryPlayerMediaViewType> *mediaView;
 @property(nonatomic, retain) UIButton *hDownloadButton; // new property
 @end
+
+/**
+ * For HD profile picture
+ */
+@interface IGUser : NSObject
+- (NSURL *)HDProfilePicURL;
+@end
+
+@interface IGProfilePictureImageView : UIView
+@property(readonly, nonatomic) IGUser *user;
+- (void)addHandleLongPress; // new
+- (void)handleLongPress:(UILongPressGestureRecognizer *)sender; // new
+@end

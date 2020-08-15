@@ -7,6 +7,8 @@
 BOOL noads;
 BOOL canSaveMedia;
 BOOL canSaveHDProfilePicture;
+BOOL disableDirectMessageSeenReceipt;
+BOOL disableStorySeenReceipt;
 
 static void reloadPrefs() {
   NSDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@PLIST_PATH] ?: [@{} mutableCopy];
@@ -14,6 +16,8 @@ static void reloadPrefs() {
   noads = [[settings objectForKey:@"noads"] ?: @(YES) boolValue];
   canSaveMedia = [[settings objectForKey:@"canSaveMedia"] ?: @(YES) boolValue];
   canSaveHDProfilePicture = [[settings objectForKey:@"canSaveHDProfilePicture"] ?: @(YES) boolValue];
+  disableDirectMessageSeenReceipt = [[settings objectForKey:@"disableDirectMessageSeenReceipt"] ?: @(YES) boolValue];
+  disableStorySeenReceipt = [[settings objectForKey:@"disableStorySeenReceipt"] ?: @(YES) boolValue];
 }
 
 static NSArray* removeAdsItemsInList(NSArray *list) {
@@ -211,6 +215,39 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
       }
     }
   %end
+
+  %hook IGSundialVideoPlaybackView
+    - (id)initWithFrame:(CGRect)arg1 {
+      id orig = %orig;
+      [orig addHandleLongPress];
+      return orig;
+    }
+
+    %new
+    - (void)addHandleLongPress {
+      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+      longPress.minimumPressDuration = 0.3;
+      [self addGestureRecognizer:longPress];
+    }
+
+    %new
+    - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
+      if (sender.state == UIGestureRecognizerStateBegan) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        // NSArray *videoURLArray = [self.video.allVideoURLs allObjects];
+        IGFeedItem *_feedItem = MSHookIvar<IGFeedItem *>(self, "_video");
+        IGVideo *video = _feedItem.video;
+        NSArray *videoURLArray = [video.allVideoURLs allObjects];
+        for (int i = 0; i < [videoURLArray count]; i++) {
+          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d", i + 1] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
+          }]];
+        }
+        [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+        [self.viewController presentViewController:alert animated:YES completion:nil];
+      }
+    }
+  %end
 %end
 
 %group CanSaveHDProfilePicture
@@ -261,6 +298,21 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
   %end
 %end
 
+%group DisableDirectMessageSeenReceipt
+  %hook IGDirectThreadViewListAdapterDataSource
+    - (BOOL)shouldUpdateLastSeenMessage {
+      return FALSE;
+    }
+  %end
+%end
+
+%group DisableStorySeenReceipt
+  %hook IGStoryViewerViewController
+    - (void)fullscreenSectionController:(id)arg1 didMarkItemAsSeen:(id)arg2 {
+    }
+  %end
+%end
+
 static id observer;
 %ctor {
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) reloadPrefs, CFSTR(PREF_CHANGED_NOTIF), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
@@ -280,6 +332,14 @@ static id observer;
 
       if (canSaveHDProfilePicture) {
         %init(CanSaveHDProfilePicture);
+      }
+
+      if (disableDirectMessageSeenReceipt) {
+        %init(DisableDirectMessageSeenReceipt)
+      }
+
+      if (disableStorySeenReceipt) {
+        %init(DisableStorySeenReceipt)
       }
     }
   ];

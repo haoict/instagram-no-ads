@@ -8,17 +8,18 @@
 @property(retain, nonatomic) UIViewController *viewController;
 @end
 
-@interface IGFeedItem : NSObject
-- (BOOL)isSponsored;
-- (BOOL)isSponsoredApp;
-@end
-
 @interface IGImageSpecifier : NSObject
 @property(readonly, nonatomic) NSURL *url;
 @end
 
 @interface IGVideo : NSObject
 @property(readonly, nonatomic) NSSet *allVideoURLs;
+@end
+
+@interface IGFeedItem : NSObject
+@property(readonly) IGVideo *video;
+- (BOOL)isSponsored;
+- (BOOL)isSponsoredApp;
 @end
 
 @interface IGImageView : UIImageView
@@ -68,6 +69,15 @@
 @property(retain, nonatomic) UIView<IGStoryPlayerMediaViewType> *mediaView;
 @property(nonatomic, retain) UIButton *hDownloadButton; // new property
 @end
+
+/**
+ * For download Reel
+ */
+@interface IGSundialVideoPlaybackView : UIView {
+  IGFeedItem *_video;
+}
+@end
+
 
 /**
  * For HD profile picture

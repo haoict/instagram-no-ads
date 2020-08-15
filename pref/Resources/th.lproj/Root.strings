@@ -11,6 +11,10 @@
   "PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION" = "แตะค้างไว้ที่มีเดีย (รูปภาพ/วิดีโอ) เพื่อแสดงตัวเลือกดาวน์โหลด";
   "CAN_SAVE_HD_PROFILE_PICTURE" = "สามารถบันทึกรูปภาพโปรไฟล์ HD";
   "PRESS_AND_HOLD_PROFILE_PICTURE_TO_DOWNLOAD" = "กดรูปภาพโปรไฟล์ค้างไว้เพื่อดาวน์โหลด";
+  "DISABLE_DIRECT_MESSAGE_SEEN_RECEIPT" = "Disable Direct Message Seen Receipt";
+  "READ_DIRECT_MESSAGE_WITHOUT_OTHERS_KNOWING" = "Read direct message without others knowing";
+  "DISABLE_STORY_SEEN_RECEIPT" = "Disable Story Seen Receipt";
+  "SEE_STORY_WITHOUT_OTHERS_KNOWING" = "See story without others knowing";
   "OTHER_PREFERENCES" = "ตั้งค่าอื่น ๆ";
   "RESET_SETTINGS" = "รีเซ็ตการตั้งค่า";
   "SUPPORT_ME" = "สนับสนุนพวกเรา";

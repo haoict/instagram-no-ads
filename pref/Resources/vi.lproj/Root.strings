@@ -11,6 +11,9 @@
   "PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION" = "Ấn và giữ vào ảnh, video để tải";
   "CAN_SAVE_HD_PROFILE_PICTURE" = "Có thể tải ảnh đại diện HD";
   "PRESS_AND_HOLD_PROFILE_PICTURE_TO_DOWNLOAD" = "Ấn và giữ vào ảnh đại diện để tải";
+  "SHOW_LIKE_COUNT" = "Hiển thị số lượng like";
+  "DETERMINE_IF_USER_IS_FOLLOWING_YOU" = "Xem người dùng khác có theo dõi bạn không";
+  "CHECK_IN_USER_PROFILE_PAGE" = "Kiểm tra ở trang cá nhân của người đó";
   "DISABLE_DIRECT_MESSAGE_SEEN_RECEIPT" = "Tắt đã đọc tin nhắn";
   "READ_DIRECT_MESSAGE_WITHOUT_OTHERS_KNOWING" = "Đọc tin nhắn ẩn danh";
   "DISABLE_STORY_SEEN_RECEIPT" = "Tắt đã xem story";

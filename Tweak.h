@@ -6,6 +6,7 @@
 
 @interface UIView (RCTViewUnmounting)
 @property(retain, nonatomic) UIViewController *viewController;
+- (UIView *)_rootView;
 @end
 
 @interface IGImageSpecifier : NSObject
@@ -17,6 +18,7 @@
 @end
 
 @interface IGFeedItem : NSObject
+@property long long likeCount;
 @property(readonly) IGVideo *video;
 - (BOOL)isSponsored;
 - (BOOL)isSponsoredApp;
@@ -83,11 +85,38 @@
  * For HD profile picture
  */
 @interface IGUser : NSObject
+@property(copy) NSString *username;
+@property BOOL followsCurrentUser; 
 - (NSURL *)HDProfilePicURL;
+- (BOOL)isUser;
 @end
 
 @interface IGProfilePictureImageView : UIView
 @property(readonly, nonatomic) IGUser *user;
 - (void)addHandleLongPress; // new
 - (void)handleLongPress:(UILongPressGestureRecognizer *)sender; // new
+@end
+
+/**
+ * Determine If User Is Following You
+ */
+@interface IGProfileBioModel
+@property(readonly, copy, nonatomic) IGUser *user;
+@end
+
+@interface IGProfileViewController : UIViewController {
+  IGProfileBioModel *_bioModel;
+}
+@end
+
+@interface IGProfileSimpleAvatarStatsCell : UICollectionViewCell
+@property(nonatomic, retain) UILabel *isFollowingYouLabel; // new property
+@end
+
+@interface IGUserSession : NSObject
+@property(readonly, nonatomic) IGUser *user; 
+@end
+
+@interface IGShakeWindow : UIWindow
+@property(nonatomic) __weak IGUserSession *userSession;
 @end

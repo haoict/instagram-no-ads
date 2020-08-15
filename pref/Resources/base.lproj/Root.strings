@@ -11,6 +11,9 @@
   "PRESS_AND_HOLD_MEDIA_TO_SHOW_DOWNLOAD_OPTION" = "Press and hold media to show download option";
   "CAN_SAVE_HD_PROFILE_PICTURE" = "Can Save HD Profile Picture";
   "PRESS_AND_HOLD_PROFILE_PICTURE_TO_DOWNLOAD" = "Press and hold Profile Picture to download";
+  "SHOW_LIKE_COUNT" = "Show Like Count";
+  "DETERMINE_IF_USER_IS_FOLLOWING_YOU" = "Determine If User Is Following You";
+  "CHECK_IN_USER_PROFILE_PAGE" = "Check in user profile page";
   "DISABLE_DIRECT_MESSAGE_SEEN_RECEIPT" = "Disable Direct Message Seen Receipt";
   "READ_DIRECT_MESSAGE_WITHOUT_OTHERS_KNOWING" = "Read direct message without others knowing";
   "DISABLE_STORY_SEEN_RECEIPT" = "Disable Story Seen Receipt";

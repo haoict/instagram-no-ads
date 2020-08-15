@@ -7,8 +7,10 @@
 BOOL noads;
 BOOL canSaveMedia;
 BOOL canSaveHDProfilePicture;
+BOOL showLikeCount;
 BOOL disableDirectMessageSeenReceipt;
 BOOL disableStorySeenReceipt;
+BOOL determineIfUserIsFollowingYou;
 
 static void reloadPrefs() {
   NSDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@PLIST_PATH] ?: [@{} mutableCopy];
@@ -16,8 +18,10 @@ static void reloadPrefs() {
   noads = [[settings objectForKey:@"noads"] ?: @(YES) boolValue];
   canSaveMedia = [[settings objectForKey:@"canSaveMedia"] ?: @(YES) boolValue];
   canSaveHDProfilePicture = [[settings objectForKey:@"canSaveHDProfilePicture"] ?: @(YES) boolValue];
-  disableDirectMessageSeenReceipt = [[settings objectForKey:@"disableDirectMessageSeenReceipt"] ?: @(YES) boolValue];
-  disableStorySeenReceipt = [[settings objectForKey:@"disableStorySeenReceipt"] ?: @(YES) boolValue];
+  showLikeCount = [[settings objectForKey:@"showLikeCount"] ?: @(YES) boolValue];
+  determineIfUserIsFollowingYou = [[settings objectForKey:@"determineIfUserIsFollowingYou"] ?: @(YES) boolValue];
+  disableDirectMessageSeenReceipt = [[settings objectForKey:@"disableDirectMessageSeenReceipt"] ?: @(NO) boolValue];
+  disableStorySeenReceipt = [[settings objectForKey:@"disableStorySeenReceipt"] ?: @(NO) boolValue];
 }
 
 static NSArray* removeAdsItemsInList(NSArray *list) {
@@ -29,6 +33,15 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
   }];
   return [orig copy];
 }
+
+%group Common
+  %hook IGFeedItem
+    - (id)buildLikeCellStyledStringWithIcon:(id)arg1 andText:(id)arg2 style:(id)arg3 {
+      NSString *newArg2 = showLikeCount ? [NSString stringWithFormat:@"%@ (%lld)", arg2 ?: @"Liked:", self.likeCount] : arg2;
+      return %orig(arg1, newArg2, arg3);
+    }
+  %end
+%end
 
 %group NoAds
   %hook IGMainFeedListAdapterDataSource
@@ -107,7 +120,7 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
           return;
         }
 
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         [alert addAction:[UIAlertAction actionWithTitle:@"Download photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
           [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:self.imageSpecifier.url appendExtension:nil mediaType:Image toAlbum:@"Instagram" view:self];
         }]];
@@ -134,10 +147,10 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
       if (sender.state == UIGestureRecognizerStateBegan) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         NSArray *videoURLArray = [self.video.allVideoURLs allObjects];
         for (int i = 0; i < [videoURLArray count]; i++) {
-          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d", i + 1] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
           }]];
         }
@@ -164,12 +177,12 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
       if (sender.state == UIGestureRecognizerStateBegan) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         IGVideoPlayer *_videoPlayer = MSHookIvar<IGVideoPlayer *>(self.delegate, "_videoPlayer");
         IGVideo *_video = MSHookIvar<IGVideo *>(_videoPlayer, "_video");
         NSArray *videoURLArray = [_video.allVideoURLs allObjects];
         for (int i = 0; i < [videoURLArray count]; i++) {
-          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d", i + 1] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" viewController:self.viewController];
           }]];
         }
@@ -200,11 +213,11 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
         NSURL *url = ((IGStoryPhotoView *)self.mediaView).mediaViewLastLoadedImageSpecifier.url;
         [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:url appendExtension:nil mediaType:Image toAlbum:@"Instagram" view:self];
       } else if ([self.mediaView isKindOfClass:%c(IGStoryVideoView)]) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         IGVideo *_video = MSHookIvar<IGVideo *>(((IGStoryVideoView *)self.mediaView).videoPlayer, "_video");
         NSArray *videoURLArray = [_video.allVideoURLs allObjects];
         for (int i = 0; i < [videoURLArray count]; i++) {
-          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d", i + 1] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" viewController:self.viewController];
           }]];
         }
@@ -233,13 +246,12 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
       if (sender.state == UIGestureRecognizerStateBegan) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
-        // NSArray *videoURLArray = [self.video.allVideoURLs allObjects];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         IGFeedItem *_feedItem = MSHookIvar<IGFeedItem *>(self, "_video");
         IGVideo *video = _feedItem.video;
         NSArray *videoURLArray = [video.allVideoURLs allObjects];
         for (int i = 0; i < [videoURLArray count]; i++) {
-          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d", i + 1] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+          [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
           }]];
         }
@@ -286,7 +298,7 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     %new
     - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
       if (sender.state == UIGestureRecognizerStateBegan) {
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         [alert addAction:[UIAlertAction actionWithTitle:@"Download HD Profile Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
           NSURL *HDProfilePicURL = [self.user HDProfilePicURL];
           [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:HDProfilePicURL appendExtension:nil mediaType:Image toAlbum:@"Instagram" viewController:self.viewController];
@@ -313,6 +325,40 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
   %end
 %end
 
+%group DetermineIfUserIsFollowingYou
+  %hook IGProfileSimpleAvatarStatsCell
+    %property (nonatomic, retain) UILabel *isFollowingYouLabel;
+
+    - (id)initWithFrame:(CGRect)arg1 {
+      self = %orig;
+
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ // ensure user's relationship is fetched
+        @try {
+          IGProfileViewController *vc = (IGProfileViewController *)self.viewController;
+          if (!vc) {
+            throw [NSException exceptionWithName:@"NullPointerException" reason:@"IGProfileViewController is nil" userInfo:nil];
+          }
+          IGProfileBioModel *_bioModel = MSHookIvar<IGProfileBioModel *>(vc, "_bioModel");
+          IGUser *user = _bioModel.user;
+
+          IGShakeWindow *rootView = (IGShakeWindow *)[self _rootView];
+          IGUser *currentUser = rootView.userSession.user;
+          if (![user.username isEqualToString:currentUser.username]) {
+            BOOL isFollowingYou = user.followsCurrentUser;
+            self.isFollowingYouLabel = [[UILabel alloc]initWithFrame:CGRectMake(141, 70, 200, 20)];
+            self.isFollowingYouLabel.text = isFollowingYou ? @"is following you" : @"is not following you";
+            self.isFollowingYouLabel.font = [UIFont systemFontOfSize:14];
+            self.isFollowingYouLabel.textColor = isFollowingYou ? [HCommon colorFromHex:@"#E1306C"] : [UIColor grayColor];
+            [self addSubview:self.isFollowingYouLabel];
+          }
+        } @catch (NSException *e) { }
+      });
+
+      return self;
+    }
+  %end
+%end
+
 static id observer;
 %ctor {
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) reloadPrefs, CFSTR(PREF_CHANGED_NOTIF), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
@@ -322,6 +368,8 @@ static id observer;
   observer = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
     object:nil queue:[NSOperationQueue mainQueue]
     usingBlock:^(NSNotification *notification) {
+      %init(Common);
+
       if (noads) {
         %init(NoAds);
       }
@@ -332,6 +380,10 @@ static id observer;
 
       if (canSaveHDProfilePicture) {
         %init(CanSaveHDProfilePicture);
+      }
+
+      if (determineIfUserIsFollowingYou) {
+        %init(DetermineIfUserIsFollowingYou)
       }
 
       if (disableDirectMessageSeenReceipt) {

@@ -1,10 +1,11 @@
 Package: com.haoict.instanoads
 Name: Instagram No Ads
 Depends: mobilesubstrate, preferenceloader, com.haoict.libhdev (>= 4.5.0), firmware (>= 10)
-Version: 2.5.1
+Version: 2.5.2
 Architecture: iphoneos-arm
 Description: Free & Open Source Tweak for Instagram
  Free & Open Source Tweak for Instagram
+ Change log: https://github.com/haoict/instagram-no-ads/releases
  Features:
  - Remove Ads (New Feeds and Stories)
  - Can save media (Photos, Videos, IGTV, Stories, Reels, press and hold to show download option)

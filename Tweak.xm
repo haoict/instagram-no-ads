@@ -106,6 +106,12 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
       return self;
     }
 
+    - (id)initWithFrame:(CGRect)arg1 shouldUseProgressiveJPEG:(BOOL)arg2 placeholderProvider:(id)arg3 {
+      self = %orig;
+      [self addHandleLongPress];
+      return self;
+    }
+
     %new
     - (void)addHandleLongPress {
       UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];

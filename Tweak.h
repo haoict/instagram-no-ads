@@ -120,3 +120,11 @@
 @interface IGShakeWindow : UIWindow
 @property(nonatomic) __weak IGUserSession *userSession;
 @end
+
+@interface IGMedia : NSObject
+@property long long likeCount;
+@end
+
+@interface IGStyledString : NSObject
+- (void)appendString:(id)arg1;
+@end

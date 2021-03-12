@@ -41,6 +41,14 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
       return %orig(arg1, newArg2, arg3);
     }
   %end
+
+  // for instagram v178.0
+  %hook IGFeedItemLikeCountCell
+    - (void)configureWithStyledString:(IGStyledString *)arg1 media:(IGMedia *)arg2 feedItemRow:(id)arg3 feedTheme:(id)arg4 cellDelegate:(id)arg5 touchHandlerDelegate:(id)arg6 topPadding:(double)arg7 userSession:(id)arg8 analyticsModule:(id)arg9 {
+      [arg1 appendString:[NSString stringWithFormat:@" (%lld)", arg2.likeCount]];
+      return %orig;
+    }
+  %end
 %end
 
 %group NoAds

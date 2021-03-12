@@ -18,6 +18,14 @@
   "READ_DIRECT_MESSAGE_WITHOUT_OTHERS_KNOWING" = "Read direct message without others knowing";
   "DISABLE_STORY_SEEN_RECEIPT" = "Disable Story Seen Receipt";
   "SEE_STORY_WITHOUT_OTHERS_KNOWING" = "See story without others knowing";
+  "APP_LOCK_PREFERENCES" = "App Lock Preferences";
+  "APP_LOCK" = "App Lock";
+  "DISABLE" = "Disable";
+  "ONLY_WHEN_APP_STARTS" = "Only when app starts";
+  "AFTER_I_LEAVE_THE_APP" = "After I leave the app";
+  "AFTER_1_MIN_AFTER_LEAVING" = "After 1 minute after leaving";
+  "AFTER_15_MIN_AFTER_LEAVING" = "After 15 minutes after leaving";
+  "AFTER_60_MIN_AFTER_LEAVING" = "After 60 minutes after leaving";
   "OTHER_PREFERENCES" = "Other Preferences";
   "RESET_SETTINGS" = "Reset Settings";
   "SUPPORT_ME" = "Support Me";

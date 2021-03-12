@@ -18,6 +18,14 @@
   "READ_DIRECT_MESSAGE_WITHOUT_OTHERS_KNOWING" = "Đọc tin nhắn ẩn danh";
   "DISABLE_STORY_SEEN_RECEIPT" = "Tắt đã xem story";
   "SEE_STORY_WITHOUT_OTHERS_KNOWING" = "Xem story ẩn danh";
+  "APP_LOCK_PREFERENCES" = "App Lock Preferences";
+  "APP_LOCK" = "App Lock";
+  "DISABLE" = "Disable";
+  "ONLY_WHEN_APP_STARTS" = "Only when app starts";
+  "AFTER_I_LEAVE_THE_APP" = "After I leave the app";
+  "AFTER_1_MIN_AFTER_LEAVING" = "After 1 minute after leaving";
+  "AFTER_15_MIN_AFTER_LEAVING" = "After 15 minutes after leaving";
+  "AFTER_60_MIN_AFTER_LEAVING" = "After 60 minutes after leaving";
   "OTHER_PREFERENCES" = "Tùy chỉnh phụ";
   "RESET_SETTINGS" = "Đặt lại tùy chỉnh";
   "SUPPORT_ME" = "Hỗ trợ tôi";

@@ -11,6 +11,7 @@ BOOL showLikeCount;
 BOOL disableDirectMessageSeenReceipt;
 BOOL disableStorySeenReceipt;
 BOOL determineIfUserIsFollowingYou;
+int appLockSetting;
 
 static void reloadPrefs() {
   NSDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@PLIST_PATH] ?: [@{} mutableCopy];
@@ -22,6 +23,7 @@ static void reloadPrefs() {
   determineIfUserIsFollowingYou = [[settings objectForKey:@"determineIfUserIsFollowingYou"] ?: @(YES) boolValue];
   disableDirectMessageSeenReceipt = [[settings objectForKey:@"disableDirectMessageSeenReceipt"] ?: @(NO) boolValue];
   disableStorySeenReceipt = [[settings objectForKey:@"disableStorySeenReceipt"] ?: @(NO) boolValue];
+  appLockSetting = [[settings objectForKey:@"appLockSetting"] intValue] ?: 0;
 }
 
 static NSArray* removeAdsItemsInList(NSArray *list) {
@@ -33,6 +35,31 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
   }];
   return [orig copy];
 }
+
+%group SecurityGroup
+  %hook IGInstagramAppDelegate
+    static BOOL isAuthenticationShowed = FALSE;
+    - (void)applicationDidBecomeActive:(id)arg1 {
+      %orig;
+
+      if (appLockSetting != 0 && !isAuthenticationShowed) {
+        UIViewController *rootController = [[self window] rootViewController];
+        SecurityViewController *securityViewController = [SecurityViewController new];
+        securityViewController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        [rootController presentViewController:securityViewController animated:YES completion:nil];
+        isAuthenticationShowed = TRUE;
+      }
+    }
+
+    - (void)applicationWillEnterForeground:(id)arg1 {
+      %orig;
+
+      if (appLockSetting == 2) {
+        isAuthenticationShowed = FALSE;
+      }
+    }
+  %end
+%end
 
 %group Common
   %hook IGFeedItem
@@ -377,6 +404,8 @@ static id observer;
 %ctor {
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) reloadPrefs, CFSTR(PREF_CHANGED_NOTIF), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
   reloadPrefs();
+
+  %init(SecurityGroup);
 
   // http://iphonedevwiki.net/index.php/User:Uroboro#Using_blocks
   observer = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification

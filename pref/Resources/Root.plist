@@ -153,6 +153,44 @@
         <string>com.haoict.instanoadspref/PrefChanged</string>
       </dict>
 
+      <!-- APP LOCK PREFS -->
+      <dict>
+        <key>cell</key>
+        <string>PSGroupCell</string>
+        <key>label</key>
+        <string>APP_LOCK_PREFERENCES</string>
+      </dict>
+      <dict>
+        <key>cell</key>
+        <string>PSLinkListCell</string>
+        <key>cellClass</key>
+        <string>HPSLinkCell</string>
+        <key>defaults</key>
+        <string>com.haoict.instanoadspref</string>
+        <key>key</key>
+        <string>appLockSetting</string>
+        <key>label</key>
+        <string>APP_LOCK</string>
+        <key>detail</key>
+        <string>HPSListItemsController</string>
+        <key>validTitles</key>
+        <array>
+          <string>DISABLE</string>
+          <string>ONLY_WHEN_APP_STARTS</string>
+          <string>AFTER_I_LEAVE_THE_APP</string>
+        </array>
+        <key>validValues</key>
+        <array>
+          <integer>0</integer>
+          <integer>1</integer>
+          <integer>2</integer>
+        </array>
+        <key>default</key>
+        <integer>0</integer>
+        <key>PostNotification</key>
+        <string>com.haoict.instanoadspref/PrefChanged</string>
+      </dict>
+
       <!-- OTHERS PREFS -->
       <dict>
         <key>cell</key>

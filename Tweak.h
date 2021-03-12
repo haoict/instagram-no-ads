@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <libhdev/HUtilities/HDownloadMediaWithProgress.h>
+#import "instanoads-Swift.h"
 
 #define PLIST_PATH "/var/mobile/Library/Preferences/com.haoict.instanoadspref.plist"
 #define PREF_CHANGED_NOTIF "com.haoict.instanoadspref/PrefChanged"
@@ -127,4 +128,7 @@
 
 @interface IGStyledString : NSObject
 - (void)appendString:(id)arg1;
+@end
+
+@interface IGInstagramAppDelegate : NSObject <UIApplicationDelegate>
 @end

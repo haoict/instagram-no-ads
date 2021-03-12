@@ -1,11 +1,14 @@
 ARCHS = arm64 arm64e
-TARGET = iphone:clang:14.4:12.0
+TARGET = iphone:clang:13.6:12.0
 INSTALL_TARGET_PROCESSES = Instagram Preferences
+
+# https://gist.github.com/haoict/96710faf0524f0ec48c13e405b124222
+PREFIX = "$(THEOS)/toolchain/XcodeDefault-11.5.xctoolchain/usr/bin/"
 
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = instanoads
-instanoads_FILES = $(wildcard *.xm *.m)
+instanoads_FILES = $(wildcard *.xm *.m *.swift **/*.swift)
 instanoads_EXTRA_FRAMEWORKS = libhdev
 instanoads_CFLAGS = -fobjc-arc -std=c++11
 

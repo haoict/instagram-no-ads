@@ -11,6 +11,7 @@ BOOL showLikeCount;
 BOOL disableDirectMessageSeenReceipt;
 BOOL disableStorySeenReceipt;
 BOOL determineIfUserIsFollowingYou;
+BOOL likeConfirmation;
 int appLockSetting;
 
 static void reloadPrefs() {
@@ -23,6 +24,7 @@ static void reloadPrefs() {
   determineIfUserIsFollowingYou = [[settings objectForKey:@"determineIfUserIsFollowingYou"] ?: @(YES) boolValue];
   disableDirectMessageSeenReceipt = [[settings objectForKey:@"disableDirectMessageSeenReceipt"] ?: @(NO) boolValue];
   disableStorySeenReceipt = [[settings objectForKey:@"disableStorySeenReceipt"] ?: @(NO) boolValue];
+  likeConfirmation = [[settings objectForKey:@"likeConfirmation"] ?: @(NO) boolValue];
   appLockSetting = [[settings objectForKey:@"appLockSetting"] intValue] ?: 0;
 }
 
@@ -34,6 +36,28 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     }
   }];
   return [orig copy];
+}
+
+static void showConfirmation(void (^okHandler)(void)) {
+  __block UIWindow* topWindow;
+  topWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+  topWindow.rootViewController = [UIViewController new];
+  topWindow.windowLevel = UIWindowLevelAlert + 1;
+
+  UIAlertController* alert = [UIAlertController alertControllerWithTitle:nil message:@"Are you sure?" preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+  [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    topWindow.hidden = YES;
+    topWindow = nil;
+    okHandler();
+  }]];
+  [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    topWindow.hidden = YES;
+    topWindow = nil;
+  }]];
+
+  [topWindow makeKeyAndVisible];
+
+  [topWindow.rootViewController presentViewController:alert animated:YES completion:nil];
 }
 
 %group SecurityGroup
@@ -61,10 +85,10 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
   %end
 %end
 
-%group Common
+%group ShowLikeCount
   %hook IGFeedItem
     - (id)buildLikeCellStyledStringWithIcon:(id)arg1 andText:(id)arg2 style:(id)arg3 {
-      NSString *newArg2 = showLikeCount ? [NSString stringWithFormat:@"%@ (%lld)", arg2 ?: @"Liked:", self.likeCount] : arg2;
+      NSString *newArg2 = [NSString stringWithFormat:@"%@ (%lld)", arg2 ?: @"Liked:", self.likeCount];
       return %orig(arg1, newArg2, arg3);
     }
   %end
@@ -74,6 +98,48 @@ static NSArray* removeAdsItemsInList(NSArray *list) {
     - (void)configureWithStyledString:(IGStyledString *)arg1 media:(IGMedia *)arg2 feedItemRow:(id)arg3 feedTheme:(id)arg4 cellDelegate:(id)arg5 touchHandlerDelegate:(id)arg6 topPadding:(double)arg7 userSession:(id)arg8 analyticsModule:(id)arg9 {
       [arg1 appendString:[NSString stringWithFormat:@" (%lld)", arg2.likeCount]];
       return %orig;
+    }
+  %end
+%end
+
+%group LikeConfirmation
+  %hook IGUFIButtonBarView
+    - (void)_onLikeButtonPressed:(id)arg1 {
+      showConfirmation(^(void) { %orig; });
+    }
+  %end
+
+  %hook IGFeedPhotoView
+    - (void)_onDoubleTap:(id)arg1 {
+      showConfirmation(^(void) { %orig; });
+    }
+  %end
+
+  %hook IGFeedItemVideoView
+    - (void)_handleOverlayDoubleTap {
+      showConfirmation(^(void) { %orig; });
+    }
+  %end
+
+  %hook IGSundialViewerVideoCell
+    - (void)_handleDoubleTap:(id)arg1 {
+      showConfirmation(^(void) { %orig; });
+    }
+  %end
+
+  %hook IGSundialViewerLikeButton
+    - (void)touchDetector:(id)arg1 touchesEnded:(id)arg2 withEvent:(id)arg3 {
+      showConfirmation(^(void) { %orig; });
+    }
+  %end
+
+  %hook IGCommentCell
+    - (void)_didDoubleTap:(id)arg1 {
+      showConfirmation(^(void) { %orig; });
+    }
+
+    - (void)contentView:(id)arg1 didTapOnLikeButton:(id)arg2 {
+      showConfirmation(^(void) { %orig; });
     }
   %end
 %end
@@ -411,7 +477,13 @@ static id observer;
   observer = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification
     object:nil queue:[NSOperationQueue mainQueue]
     usingBlock:^(NSNotification *notification) {
-      %init(Common);
+      if (showLikeCount) {
+        %init(ShowLikeCount);
+      }
+
+      if (likeConfirmation) {
+        %init(LikeConfirmation);
+      }
 
       if (noads) {
         %init(NoAds);

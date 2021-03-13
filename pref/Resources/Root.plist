@@ -153,6 +153,26 @@
         <string>com.haoict.instanoadspref/PrefChanged</string>
       </dict>
 
+
+      <dict>
+        <key>cell</key>
+        <string>PSSwitchCell</string>
+        <key>cellClass</key>
+        <string>HPSSwitchCell</string>
+        <key>default</key>
+        <false/>
+        <key>defaults</key>
+        <string>com.haoict.instanoadspref</string>
+        <key>key</key>
+        <string>likeConfirmation</string>
+        <key>label</key>
+        <string>LIKE_CONFIRMATION</string>
+        <key>subtitle</key>
+        <string>SHOW_CONFIRMATION_BEFORE_YOU_LIKE_SOMETHING</string>
+        <key>PostNotification</key>
+        <string>com.haoict.instanoadspref/PrefChanged</string>
+      </dict>
+
       <!-- APP LOCK PREFS -->
       <dict>
         <key>cell</key>

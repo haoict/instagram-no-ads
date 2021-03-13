@@ -12,6 +12,8 @@
   "CAN_SAVE_HD_PROFILE_PICTURE" = "Có thể tải ảnh đại diện HD";
   "PRESS_AND_HOLD_PROFILE_PICTURE_TO_DOWNLOAD" = "Ấn và giữ vào ảnh đại diện để tải";
   "SHOW_LIKE_COUNT" = "Hiển thị số lượng like";
+  "LIKE_CONFIRMATION" = "Xác nhận trước khi like";
+  "SHOW_CONFIRMATION_BEFORE_YOU_LIKE_SOMETHING" = "Hiển thị xác nhận trước khi bạn like";
   "DETERMINE_IF_USER_IS_FOLLOWING_YOU" = "Xem người dùng khác có theo dõi bạn không";
   "CHECK_IN_USER_PROFILE_PAGE" = "Kiểm tra ở trang cá nhân của người đó";
   "DISABLE_DIRECT_MESSAGE_SEEN_RECEIPT" = "Tắt đã đọc tin nhắn";

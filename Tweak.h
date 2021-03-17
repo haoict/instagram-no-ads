@@ -127,6 +127,7 @@
 @end
 
 @interface IGStyledString : NSObject
+@property(retain, nonatomic) NSMutableAttributedString *attributedString;
 - (void)appendString:(id)arg1;
 @end
 

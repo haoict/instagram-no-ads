@@ -10,6 +10,7 @@ BOOL canSaveHDProfilePicture;
 BOOL showLikeCount;
 BOOL disableDirectMessageSeenReceipt;
 BOOL disableStorySeenReceipt;
+BOOL unlimitedReplayDirectMessage;
 BOOL determineIfUserIsFollowingYou;
 BOOL likeConfirmation;
 int appLockSetting;
@@ -24,6 +25,7 @@ static void reloadPrefs() {
   determineIfUserIsFollowingYou = [[settings objectForKey:@"determineIfUserIsFollowingYou"] ?: @(YES) boolValue];
   disableDirectMessageSeenReceipt = [[settings objectForKey:@"disableDirectMessageSeenReceipt"] ?: @(NO) boolValue];
   disableStorySeenReceipt = [[settings objectForKey:@"disableStorySeenReceipt"] ?: @(NO) boolValue];
+  unlimitedReplayDirectMessage = [[settings objectForKey:@"unlimitedReplayDirectMessage"] ?: @(YES) boolValue];
   likeConfirmation = [[settings objectForKey:@"likeConfirmation"] ?: @(NO) boolValue];
   appLockSetting = [[settings objectForKey:@"appLockSetting"] intValue] ?: 0;
 }
@@ -95,9 +97,24 @@ static void showConfirmation(void (^okHandler)(void)) {
 
   // for instagram v178.0
   %hook IGFeedItemLikeCountCell
-    - (void)configureWithStyledString:(IGStyledString *)arg1 media:(IGMedia *)arg2 feedItemRow:(id)arg3 feedTheme:(id)arg4 cellDelegate:(id)arg5 touchHandlerDelegate:(id)arg6 topPadding:(double)arg7 userSession:(id)arg8 analyticsModule:(id)arg9 {
-      [arg1 appendString:[NSString stringWithFormat:@" (%lld)", arg2.likeCount]];
-      return %orig;
+    + (IGStyledString *)buildStyledStringWithMedia:(IGMedia *)arg1 feedItemRow:(id)arg2 pageCellState:(id)arg3 configuration:(id)arg4 feedConfiguration:(id)arg5 contentWidth:(double)arg6 textWidth:(double)arg7 combinedContextOptions:(long long)arg8 userSession:(id)arg9 {
+      IGStyledString *orig = %orig;
+      if (orig != nil
+        && orig.attributedString != nil
+        && orig.attributedString.string != nil
+        && ![orig.attributedString.string containsString:@"("]
+        && ![orig.attributedString.string containsString:@")"]) {
+        [orig appendString:[NSString stringWithFormat:@" (%lld)", arg1.likeCount]];
+      }
+      return orig;
+    }
+  %end
+%end
+
+%group UnlimitedReplayDirectMessage
+  %hook IGStoryPhotoView
+    - (void)progressImageView:(id)arg1 didLoadImage:(id)arg2 loadSource:(id)arg3 networkRequestSummary:(id)arg4 {
+
     }
   %end
 %end
@@ -507,6 +524,10 @@ static id observer;
 
       if (disableStorySeenReceipt) {
         %init(DisableStorySeenReceipt)
+      }
+
+      if (unlimitedReplayDirectMessage) {
+        %init(UnlimitedReplayDirectMessage)
       }
     }
   ];

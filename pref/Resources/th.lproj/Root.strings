@@ -20,6 +20,8 @@
   "READ_DIRECT_MESSAGE_WITHOUT_OTHERS_KNOWING" = "Read direct message without others knowing";
   "DISABLE_STORY_SEEN_RECEIPT" = "Disable Story Seen Receipt";
   "SEE_STORY_WITHOUT_OTHERS_KNOWING" = "See story without others knowing";
+  "UNLIMITED_REPLAY_DIRECT_MESSAGES" = "Unlimited Replay Direct Messages";
+  "UNLIMITED_REPLAY_DIRECT_MESSAGES_DESC" = "Photo/Video in DM can be replayed anytime and stay permanently";
   "APP_LOCK_PREFERENCES" = "App Lock Preferences";
   "APP_LOCK" = "App Lock";
   "DISABLE" = "Disable";

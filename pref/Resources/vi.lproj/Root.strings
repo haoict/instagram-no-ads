@@ -20,6 +20,8 @@
   "READ_DIRECT_MESSAGE_WITHOUT_OTHERS_KNOWING" = "Đọc tin nhắn ẩn danh";
   "DISABLE_STORY_SEEN_RECEIPT" = "Tắt đã xem story";
   "SEE_STORY_WITHOUT_OTHERS_KNOWING" = "Xem story ẩn danh";
+  "UNLIMITED_REPLAY_DIRECT_MESSAGES" = "Unlimited Replay Direct Messages";
+  "UNLIMITED_REPLAY_DIRECT_MESSAGES_DESC" = "Photo/Video in DM can be replayed anytime and stay permanently";
   "APP_LOCK_PREFERENCES" = "App Lock Preferences";
   "APP_LOCK" = "App Lock";
   "DISABLE" = "Disable";

@@ -14,6 +14,7 @@ Free & Open Source Tweak for Instagram app on iOS!
 - Show like count
 - Determine if user is following you
 - Disable DM seen and Story seen receipt
+- Unlimited Replay Direct Message
 - Support iOS 12 - 14 & latest version of Instagram
 
 ## Cydia Repo

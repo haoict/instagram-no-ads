@@ -60,8 +60,13 @@
 @protocol IGStoryPlayerMediaViewType
 @end
 
+@interface IGImageProgressView : UIView
+@property(retain, nonatomic) IGImageSpecifier *imageSpecifier;
+@end
+
 @interface IGStoryPhotoView : UIView<IGStoryPlayerMediaViewType>
-@property(retain, nonatomic) IGImageSpecifier *mediaViewLastLoadedImageSpecifier; 
+@property(retain, nonatomic) IGImageSpecifier *mediaViewLastLoadedImageSpecifier;
+@property(readonly, nonatomic) IGImageProgressView *photoView;
 @end
 
 @interface IGStoryVideoView : UIView<IGStoryPlayerMediaViewType>

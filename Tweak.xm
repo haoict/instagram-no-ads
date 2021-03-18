@@ -334,7 +334,7 @@ static void showConfirmation(void (^okHandler)(void)) {
     %new
     - (void)hDownloadButtonPressed:(UIButton *)sender {
       if ([self.mediaView isKindOfClass:%c(IGStoryPhotoView)]) {
-        NSURL *url = ((IGStoryPhotoView *)self.mediaView).mediaViewLastLoadedImageSpecifier.url;
+        NSURL *url = ((IGStoryPhotoView *)self.mediaView).photoView.imageSpecifier.url;
         [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:url appendExtension:nil mediaType:Image toAlbum:@"Instagram" view:self];
       } else if ([self.mediaView isKindOfClass:%c(IGStoryVideoView)]) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];

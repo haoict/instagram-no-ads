@@ -1,12 +1,12 @@
 Package: com.haoict.instanoads
 Name: Instagram No Ads
 Depends: mobilesubstrate, preferenceloader, com.haoict.libhdev (>= 4.8.0), firmware (>= 12), firmware(>= 12.2) | ${LIBSWIFT}
-Version: 2.8.1
+Version: 2.8.1.1
 Architecture: iphoneos-arm
 Description: Free & Open Source Tweak for Instagram
  Free & Open Source Tweak for Instagram
  Change log: https://github.com/haoict/instagram-no-ads/releases
- . 
+ .
  Features:
  - Remove Ads (New Feeds and Stories)
  - Can save media (Photos, Videos, IGTV, Stories, Reels, press and hold to show download option)
@@ -18,10 +18,10 @@ Description: Free & Open Source Tweak for Instagram
  - Like confirmation
  - Add App lock (use faceid/touchid to unlock)
  - Support iOS 12 - 14 & latest Instagram version (>= 178.0)
- . 
+ .
  I work very hard to make good, free and open source tweaks for everyone
  If you want to support, you can buy me a coffee at https://www.paypal.me/haoict
- . 
+ .
  Thanks a ton
 Maintainer: Hao Nguyen
 Author: Hao Nguyen

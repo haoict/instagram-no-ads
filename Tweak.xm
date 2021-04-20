@@ -245,6 +245,18 @@ static void showConfirmation(void (^okHandler)(void)) {
         }
 
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+          InstaZoomImageViewController *imageVC = [[%c(InstaZoomImageViewController) alloc] initWithSourceImage:self.image];
+
+        	if (imageVC)
+        	{
+        		imageVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        		imageVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        		//AppDelegate *igDelegate = [UIApplication sharedApplication].delegate;
+        	  [self.viewController presentViewController:imageVC animated:YES completion:nil];
+        	}
+        }]];
+
         [alert addAction:[UIAlertAction actionWithTitle:@"Download photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
           [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:self.imageSpecifier.url appendExtension:nil mediaType:Image toAlbum:@"Instagram" view:self];
         }]];
@@ -273,6 +285,17 @@ static void showConfirmation(void (^okHandler)(void)) {
       if (sender.state == UIGestureRecognizerStateBegan) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
         NSArray *videoURLArray = [self.video.allVideoURLs allObjects];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+      			AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+      			AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+      			playerViewController.player = player;
+      			playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+      			[self.viewController presentViewController:playerViewController animated:YES completion:^{
+      			  [playerViewController.player play];
+            }];
+        }]];
+
         for (int i = 0; i < [videoURLArray count]; i++) {
           [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
@@ -305,6 +328,17 @@ static void showConfirmation(void (^okHandler)(void)) {
         IGVideoPlayer *_videoPlayer = MSHookIvar<IGVideoPlayer *>(self.delegate, "_videoPlayer");
         IGVideo *_video = MSHookIvar<IGVideo *>(_videoPlayer, "_video");
         NSArray *videoURLArray = [_video.allVideoURLs allObjects];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+      			AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+      			AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+      			playerViewController.player = player;
+      			playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+      			[self.viewController presentViewController:playerViewController animated:YES completion:^{
+      			  [playerViewController.player play];
+            }];
+        }]];
+
         for (int i = 0; i < [videoURLArray count]; i++) {
           [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" viewController:self.viewController];
@@ -374,6 +408,17 @@ static void showConfirmation(void (^okHandler)(void)) {
         IGFeedItem *_feedItem = MSHookIvar<IGFeedItem *>(self, "_video");
         IGVideo *video = _feedItem.video;
         NSArray *videoURLArray = [video.allVideoURLs allObjects];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+      			AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+      			AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+      			playerViewController.player = player;
+      			playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+      			[self.viewController presentViewController:playerViewController animated:YES completion:^{
+      			  [playerViewController.player play];
+            }];
+        }]];
+
         for (int i = 0; i < [videoURLArray count]; i++) {
           [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];

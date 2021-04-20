@@ -1,6 +1,9 @@
 #import <Foundation/Foundation.h>
 #import <libhdev/HUtilities/HDownloadMediaWithProgress.h>
 #import "instanoads-Swift.h"
+#import <AVFoundation/AVFoundation.h>
+#import <AVKit/AVPlayerViewController.h>
+#import "lib/InstaZoomImageViewController.h"
 
 #define PLIST_PATH "/var/mobile/Library/Preferences/com.haoict.instanoadspref.plist"
 #define PREF_CHANGED_NOTIF "com.haoict.instanoadspref/PrefChanged"
@@ -92,7 +95,7 @@
  */
 @interface IGUser : NSObject
 @property(copy) NSString *username;
-@property BOOL followsCurrentUser; 
+@property BOOL followsCurrentUser;
 - (NSURL *)HDProfilePicURL;
 - (BOOL)isUser;
 @end
@@ -120,7 +123,7 @@
 @end
 
 @interface IGUserSession : NSObject
-@property(readonly, nonatomic) IGUser *user; 
+@property(readonly, nonatomic) IGUser *user;
 @end
 
 @interface IGShakeWindow : UIWindow

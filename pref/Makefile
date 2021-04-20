@@ -1,4 +1,6 @@
-ARCHS = arm64 arm64e
+export PREFIX = $(THEOS)/toolchain/Xcode11.xctoolchain/usr/bin/
+export ARCHS = arm64 arm64e
+export TARGET = iphone:clang:13.0:13.0
 
 include $(THEOS)/makefiles/common.mk
 

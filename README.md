@@ -39,6 +39,8 @@ make do
 
 [jacobcxdev](https://github.com/jacobcxdev)
 
+[P2KDev](https://github.com/p2kdev)
+
 [jaideejung007](https://github.com/jaideejung007) (Thai Translator)
 
 Contributions of any kind welcome!

@@ -468,8 +468,20 @@ static void showConfirmation(void (^okHandler)(void)) {
     - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
       if (sender.state == UIGestureRecognizerStateBegan) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+        NSURL *HDProfilePicURL = [self.user HDProfilePicURL];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+          InstaZoomImageViewController *imageVC = [[%c(InstaZoomImageViewController) alloc] initWithSourceImageUrl:HDProfilePicURL];
+
+          if (imageVC) {
+            imageVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+            imageVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            //AppDelegate *igDelegate = [UIApplication sharedApplication].delegate;
+            [self.viewController presentViewController:imageVC animated:YES completion:nil];
+          }
+        }]];
+
         [alert addAction:[UIAlertAction actionWithTitle:@"Download HD Profile Picture" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-          NSURL *HDProfilePicURL = [self.user HDProfilePicURL];
           [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:HDProfilePicURL appendExtension:nil mediaType:Image toAlbum:@"Instagram" viewController:self.viewController];
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];

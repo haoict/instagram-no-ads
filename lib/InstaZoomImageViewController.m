@@ -29,6 +29,26 @@ static CGPoint initialTouchPoint;
 
 #pragma mark - Initializers
 
+- (instancetype)initWithSourceImageUrl:(NSURL*)url {
+    self = [super init];
+
+    if (self) {
+        // this isn't asynchronous. we may need to improve it https://stackoverflow.com/questions/1760857/iphone-how-to-get-a-uiimage-from-a-url
+        NSData * data = [NSData dataWithContentsOfURL:url];
+        UIImage * image = [UIImage imageWithData:data];
+        if (image) {
+            self.image = image;
+        }
+        else {
+            // Failed (load an error image?)
+        }
+
+        [self commonInit];
+    }
+
+    return self;
+}
+
 - (instancetype)initWithSourceImage:(UIImage*)image {
     self = [super init];
 
@@ -67,6 +87,15 @@ static CGPoint initialTouchPoint;
     self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.scrollView];
 
     [self addImageToScrollView];
+
+    if (!self.image) {
+        UILabel *errorMessage = [[UILabel alloc] initWithFrame:self.view.bounds];
+        errorMessage.text = @"Error loading image";
+        errorMessage.textAlignment = NSTextAlignmentCenter;
+        errorMessage.textColor = [UIColor whiteColor];
+
+        [self.view addSubview:errorMessage];
+    }
 }
 
 - (void)addChromeToUI {

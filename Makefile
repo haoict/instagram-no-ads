@@ -1,7 +1,7 @@
-export PREFIX = $(THEOS)/toolchain/Xcode11.xctoolchain/usr/bin/
+export PREFIX = $(THEOS)/toolchain/XcodeDefault-11.5.xctoolchain/usr/bin/
 
 export ARCHS = arm64 arm64e
-export TARGET = iphone:clang:13.0:13.0
+export TARGET = iphone:clang:13.6:12.0
 INSTALL_TARGET_PROCESSES = Instagram Preferences
 
 # https://gist.github.com/haoict/96710faf0524f0ec48c13e405b124222

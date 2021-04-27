@@ -119,7 +119,9 @@
 @end
 
 @interface IGProfileSimpleAvatarStatsCell : UICollectionViewCell
+@property(nonatomic, retain) UIView *isFollowingYouBadge; // new property
 @property(nonatomic, retain) UILabel *isFollowingYouLabel; // new property
+- (void)addIsFollowingYouBadgeView; // new
 @end
 
 @interface IGUserSession : NSObject

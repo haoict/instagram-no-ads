@@ -509,6 +509,7 @@ static void showConfirmation(void (^okHandler)(void)) {
 %group DetermineIfUserIsFollowingYou
   %hook IGProfileSimpleAvatarStatsCell
     %property (nonatomic, retain) UILabel *isFollowingYouLabel;
+    %property (nonatomic, retain) UIView *isFollowingYouBadge;
 
     - (id)initWithFrame:(CGRect)arg1 {
       self = %orig;
@@ -524,18 +525,35 @@ static void showConfirmation(void (^okHandler)(void)) {
 
           IGShakeWindow *rootView = (IGShakeWindow *)[self _rootView];
           IGUser *currentUser = rootView.userSession.user;
-          if (![user.username isEqualToString:currentUser.username]) {
-            BOOL isFollowingYou = user.followsCurrentUser;
-            self.isFollowingYouLabel = [[UILabel alloc]initWithFrame:CGRectMake(141, 70, 200, 20)];
-            self.isFollowingYouLabel.text = isFollowingYou ? @"is following you" : @"is not following you";
-            self.isFollowingYouLabel.font = [UIFont systemFontOfSize:14];
-            self.isFollowingYouLabel.textColor = isFollowingYou ? [HCommon colorFromHex:@"#E1306C"] : [UIColor grayColor];
-            [self addSubview:self.isFollowingYouLabel];
+          if (![user.username isEqualToString:currentUser.username] && user.followsCurrentUser) {
+            [self addIsFollowingYouBadgeView];
           }
         } @catch (NSException *e) { }
       });
 
       return self;
+    }
+
+    %new
+    - (void)addIsFollowingYouBadgeView {
+      self.isFollowingYouBadge = [[UIView alloc] init];
+      self.isFollowingYouBadge.frame = CGRectMake(155, 75, 70, 16);
+      self.isFollowingYouBadge.alpha = 1;
+      self.isFollowingYouBadge.layer.cornerRadius = 4;
+      self.isFollowingYouBadge.backgroundColor = [HCommon isDarkMode] ? [UIColor colorWithRed:0.125 green:0.137 blue:0.153 alpha:1] : [UIColor colorWithRed:0.922 green:0.933 blue:0.941 alpha:1];
+
+      [self addSubview:self.isFollowingYouBadge];
+
+      UIFont * customFont = [UIFont fontWithName:@"Arial-BoldMT" size:10]; //custom font
+      self.isFollowingYouLabel = [[UILabel alloc] initWithFrame:CGRectMake(2.0, 0.0, 66.0, 16.0)];
+      self.isFollowingYouLabel.translatesAutoresizingMaskIntoConstraints = false;
+      self.isFollowingYouLabel.text = @"Follows you";
+      self.isFollowingYouLabel.font = customFont;
+      self.isFollowingYouLabel.adjustsFontSizeToFitWidth = true;
+      self.isFollowingYouLabel.textAlignment = NSTextAlignmentCenter;
+      self.isFollowingYouLabel.textColor = [HCommon isDarkMode] ? [UIColor colorWithRed:0.486 green:0.514 blue:0.541 alpha:1] : [UIColor colorWithRed:0.357 green:0.439 blue:0.541 alpha:1];
+      [self.isFollowingYouBadge addSubview:self.isFollowingYouLabel];
+
     }
   %end
 %end

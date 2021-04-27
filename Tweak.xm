@@ -248,13 +248,13 @@ static void showConfirmation(void (^okHandler)(void)) {
         [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
           InstaZoomImageViewController *imageVC = [[%c(InstaZoomImageViewController) alloc] initWithSourceImage:self.image];
 
-        	if (imageVC)
-        	{
-        		imageVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
-        		imageVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        		//AppDelegate *igDelegate = [UIApplication sharedApplication].delegate;
-        	  [self.viewController presentViewController:imageVC animated:YES completion:nil];
-        	}
+          if (imageVC)
+          {
+            imageVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+            imageVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            //AppDelegate *igDelegate = [UIApplication sharedApplication].delegate;
+            [self.viewController presentViewController:imageVC animated:YES completion:nil];
+          }
         }]];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Download photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -287,12 +287,12 @@ static void showConfirmation(void (^okHandler)(void)) {
         NSArray *videoURLArray = [self.video.allVideoURLs allObjects];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-      			AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
-      			AVPlayerViewController *playerViewController = [AVPlayerViewController new];
-      			playerViewController.player = player;
-      			playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-      			[self.viewController presentViewController:playerViewController animated:YES completion:^{
-      			  [playerViewController.player play];
+            AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+            AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+            playerViewController.player = player;
+            playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self.viewController presentViewController:playerViewController animated:YES completion:^{
+              [playerViewController.player play];
             }];
         }]];
 
@@ -330,12 +330,12 @@ static void showConfirmation(void (^okHandler)(void)) {
         NSArray *videoURLArray = [_video.allVideoURLs allObjects];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-      			AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
-      			AVPlayerViewController *playerViewController = [AVPlayerViewController new];
-      			playerViewController.player = player;
-      			playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-      			[self.viewController presentViewController:playerViewController animated:YES completion:^{
-      			  [playerViewController.player play];
+            AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+            AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+            playerViewController.player = player;
+            playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self.viewController presentViewController:playerViewController animated:YES completion:^{
+              [playerViewController.player play];
             }];
         }]];
 
@@ -410,12 +410,12 @@ static void showConfirmation(void (^okHandler)(void)) {
         NSArray *videoURLArray = [video.allVideoURLs allObjects];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-      			AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
-      			AVPlayerViewController *playerViewController = [AVPlayerViewController new];
-      			playerViewController.player = player;
-      			playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-      			[self.viewController presentViewController:playerViewController animated:YES completion:^{
-      			  [playerViewController.player play];
+            AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+            AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+            playerViewController.player = player;
+            playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+            [self.viewController presentViewController:playerViewController animated:YES completion:^{
+              [playerViewController.player play];
             }];
         }]];
 

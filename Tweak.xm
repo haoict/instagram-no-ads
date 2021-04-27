@@ -25,7 +25,7 @@ static void reloadPrefs() {
   determineIfUserIsFollowingYou = [[settings objectForKey:@"determineIfUserIsFollowingYou"] ?: @(YES) boolValue];
   disableDirectMessageSeenReceipt = [[settings objectForKey:@"disableDirectMessageSeenReceipt"] ?: @(NO) boolValue];
   disableStorySeenReceipt = [[settings objectForKey:@"disableStorySeenReceipt"] ?: @(NO) boolValue];
-  unlimitedReplayDirectMessage = [[settings objectForKey:@"unlimitedReplayDirectMessage"] ?: @(YES) boolValue];
+  unlimitedReplayDirectMessage = [[settings objectForKey:@"unlimitedReplayDirectMessage"] ?: @(NO) boolValue];
   likeConfirmation = [[settings objectForKey:@"likeConfirmation"] ?: @(NO) boolValue];
   appLockSetting = [[settings objectForKey:@"appLockSetting"] intValue] ?: 0;
 }

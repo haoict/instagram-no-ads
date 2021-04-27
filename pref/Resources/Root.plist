@@ -159,7 +159,7 @@
         <key>cellClass</key>
         <string>HPSSwitchCell</string>
         <key>default</key>
-        <true/>
+        <false/>
         <key>defaults</key>
         <string>com.haoict.instanoadspref</string>
         <key>key</key>

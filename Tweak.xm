@@ -90,7 +90,11 @@ static void showConfirmation(void (^okHandler)(void)) {
 %group ShowLikeCount
   %hook IGFeedItem
     - (id)buildLikeCellStyledStringWithIcon:(id)arg1 andText:(id)arg2 style:(id)arg3 {
-      NSString *newArg2 = [NSString stringWithFormat:@"%@ (%lld)", arg2 ?: @"Liked:", self.likeCount];
+      NSNumberFormatter *formatter = [NSNumberFormatter new];
+      [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+      NSString *formatted = [formatter stringFromNumber:[NSNumber numberWithInteger:self.likeCount]];
+
+      NSString *newArg2 = [NSString stringWithFormat:@"%@ (%@)", arg2 ?: @"Liked:", formatted];
       return %orig(arg1, newArg2, arg3);
     }
   %end
@@ -104,7 +108,10 @@ static void showConfirmation(void (^okHandler)(void)) {
         && orig.attributedString.string != nil
         && ![orig.attributedString.string containsString:@"("]
         && ![orig.attributedString.string containsString:@")"]) {
-        [orig appendString:[NSString stringWithFormat:@" (%lld)", arg1.likeCount]];
+          NSNumberFormatter *formatter = [NSNumberFormatter new];
+          [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+          NSString *formatted = [formatter stringFromNumber:[NSNumber numberWithInteger:arg1.likeCount]];
+          [orig appendString:[NSString stringWithFormat:@" (%@)", formatted]];
       }
       return orig;
     }

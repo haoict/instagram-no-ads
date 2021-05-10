@@ -1,7 +1,7 @@
 Package: com.haoict.instanoads
 Name: Instagram No Ads
-Depends: mobilesubstrate, preferenceloader, com.haoict.libhdev (>= 4.8.0), firmware (>= 12), firmware(>= 12.2) | ${LIBSWIFT}
-Version: 2.9.0
+Depends: mobilesubstrate, preferenceloader, com.haoict.libhdev (>= 4.8.1), firmware (>= 12), firmware(>= 12.2) | ${LIBSWIFT}
+Version: 2.9.1
 Architecture: iphoneos-arm
 Description: Free & Open Source Tweak for Instagram
  Free & Open Source Tweak for Instagram

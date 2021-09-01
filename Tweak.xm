@@ -221,6 +221,16 @@ static void showConfirmation(void (^okHandler)(void)) {
       return nil;
     }
   %end
+
+  %hook IGSundialAdsResponseParser
+    - (id)parsedObjectFromResponse:(id)arg1 {
+      return nil;
+    }
+
+    - (id)initWithMediaStore:(id)arg1 userStore:(id)arg2 {
+      return nil;
+    }
+  %end
 %end
 
 %group CanSaveMedia

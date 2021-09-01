@@ -8,7 +8,7 @@ Free & Open Source Tweak for Instagram app on iOS!
 <img src="https://haoict.github.io/cydia/images/instanoads.jpg" alt="Instagram No Ads" width="414"/>
 
 ## Features
-- Remove Ads (New Feeds and Stories)
+- Remove Ads (New Feeds, Stories & Reels)
 - Can save media (Photos, Videos, IGTV, Stories, Reels, press and hold to show download option)
 - Can Save HD Profile Picture (Press and hold to show download option)
 - Show like count

@@ -312,7 +312,7 @@ static void showConfirmation(void (^okHandler)(void)) {
           
           for (int i = 0; i < [videoURLArray count]; i++) {
               [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                  [[[%c(HDownloadMediaWithProgress) alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
+                  [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
               }]];
           }
           [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
@@ -350,7 +350,7 @@ static void showConfirmation(void (^okHandler)(void)) {
           
           for (int i = 0; i < [videoURLArray count]; i++) {
               [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                  [[[%c(HDownloadMediaWithProgress) alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
+                  [[[HDownloadMediaWithProgress alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
               }]];
           }
           [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];

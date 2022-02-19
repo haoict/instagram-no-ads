@@ -616,7 +616,7 @@ static void showConfirmation(void (^okHandler)(void)) {
           IGProfileBioModel *_bioModel = MSHookIvar<IGProfileBioModel *>(vc, "_bioModel");
           IGUser *user = _bioModel.user;
 
-          IGShakeWindow *rootView = (IGShakeWindow *)[self _rootView];
+          IGWindow *rootView = (IGWindow *)[self _rootView];
           IGUser *currentUser = rootView.userSession.user;
           if (![user.username isEqualToString:currentUser.username] && user.followsCurrentUser) {
             [self addIsFollowingYouBadgeView];

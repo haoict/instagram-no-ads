@@ -147,6 +147,10 @@
 @property(readonly, nonatomic) IGUser *user;
 @end
 
+@interface IGWindow : UIWindow
+@property(nonatomic) __weak IGUserSession *userSession;
+@end
+
 @interface IGShakeWindow : UIWindow
 @property(nonatomic) __weak IGUserSession *userSession;
 @end

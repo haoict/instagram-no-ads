@@ -283,6 +283,82 @@ static void showConfirmation(void (^okHandler)(void)) {
     }
   %end
 
+  %hook IGModernFeedVideoCell
+  - (id)initWithFrame:(CGRect)arg1 {
+      id orig = %orig;
+      [orig addHandleLongPress];
+      return orig;
+  }
+
+  %new - (void)addHandleLongPress {
+      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+      longPress.minimumPressDuration = 0.3;
+      [self addGestureRecognizer:longPress];
+  }
+  %new - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
+      if (sender.state == UIGestureRecognizerStateBegan) {
+          UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+          NSArray *videoURLArray = [self.post.video.allVideoURLs allObjects];
+          
+          [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+              AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+              AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+              playerViewController.player = player;
+              playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+              [self.viewController presentViewController:playerViewController animated:YES completion:^{
+                  [playerViewController.player play];
+              }];
+          }]];
+          
+          for (int i = 0; i < [videoURLArray count]; i++) {
+              [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                  [[[%c(HDownloadMediaWithProgress) alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
+              }]];
+          }
+          [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+          [self.viewController presentViewController:alert animated:YES completion:nil];
+      }
+  }
+  %end
+
+  %hook IGPanavisionFeedVideoCell
+  - (id)initWithFrame:(CGRect)arg1 {
+      id orig = %orig;
+      [orig addHandleLongPress];
+      return orig;
+  }
+
+  %new - (void)addHandleLongPress {
+      UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+      longPress.minimumPressDuration = 0.3;
+      [self addGestureRecognizer:longPress];
+  }
+  %new - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
+      if (sender.state == UIGestureRecognizerStateBegan) {
+          UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Instagram No Ads" message:nil preferredStyle:IS_iPAD ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet];
+          NSArray *videoURLArray = [self.post.video.allVideoURLs allObjects];
+          
+          [alert addAction:[UIAlertAction actionWithTitle:@"Preview" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+              AVPlayer *player = [AVPlayer playerWithURL:videoURLArray[videoURLArray.count - 1]];
+              AVPlayerViewController *playerViewController = [AVPlayerViewController new];
+              playerViewController.player = player;
+              playerViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+              [self.viewController presentViewController:playerViewController animated:YES completion:^{
+                  [playerViewController.player play];
+              }];
+          }]];
+          
+          for (int i = 0; i < [videoURLArray count]; i++) {
+              [alert addAction:[UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Download video - link %d (%@)", i + 1, i == 0 ? @"HD" : @"SD"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                  [[[%c(HDownloadMediaWithProgress) alloc] init] checkPermissionToPhotosAndDownloadURL:[videoURLArray objectAtIndex:i] appendExtension:nil mediaType:Video toAlbum:@"Instagram" view:self];
+              }]];
+          }
+          [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+          [self.viewController presentViewController:alert animated:YES completion:nil];
+      }
+  }
+  %end
+
   %hook IGFeedItemVideoView
     - (id)initWithFrame:(CGRect)arg1 {
       id orig = %orig;

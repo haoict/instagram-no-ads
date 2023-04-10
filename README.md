@@ -9,6 +9,7 @@ Free & Open Source Tweak for Instagram app on iOS!
 
 ## Features
 - Remove Ads (New Feeds, Stories & Reels)
+- Remove Suggested Posts on Home Feed
 - Can save media (Photos, Videos, IGTV, Stories, Reels, press and hold to show download option)
 - Can Save HD Profile Picture (Press and hold to show download option)
 - Show like count

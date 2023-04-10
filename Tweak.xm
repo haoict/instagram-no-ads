@@ -33,6 +33,18 @@ static void reloadPrefs() {
 static NSArray* removeAdsItemsInList(NSArray *list) {
   NSMutableArray *orig = [list mutableCopy];
   [orig enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    if([obj isKindOfClass:%c(IGMedia)]){
+        BOOL isSuggested = NO;
+        @try{
+            if([[NSString stringWithFormat:@"%@", [obj valueForKey:@"_isExplorePostOnFeed"]] isEqual:@"1"] ){
+                isSuggested = YES;
+            }
+        }@catch(NSException *e){}
+
+        if(isSuggested){
+            [orig removeObjectAtIndex:idx];
+        }
+    }
     if (([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) || [obj isKindOfClass:%c(IGAdItem)]) {
       [orig removeObjectAtIndex:idx];
     }
